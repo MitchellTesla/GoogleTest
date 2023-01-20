@@ -487,7 +487,7 @@ When built with Bazel and using Abseil, googletest uses the
 systems (Linux, Cygwin, Mac), googletest uses the
 [POSIX extended regular expression](http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap09.html#tag_09_04)
 syntax. To learn about POSIX syntax, you may want to read this
-[Wikipedia entry](http://en.wikipedia.org/wiki/Regular_expression#POSIX_Extended_Regular_Expressions).
+[Wikipedia entry](http://en.wikipedia.org/wiki/Regular_expression#POSIX_extended).
 
 On Windows, googletest uses its own simple regular expression implementation. It
 lacks many features. For example, we don't support union (`"x|y"`), grouping
@@ -1095,6 +1095,11 @@ instantiation of the test suite. The next argument is the name of the test
 pattern, and the last is the
 [parameter generator](reference/testing.md#param-generators).
 
+The parameter generator expression is not evaluated until GoogleTest is
+initialized (via `InitGoogleTest()`). Any prior initialization done in the
+`main` function will be accessible from the parameter generator, for example,
+the results of flag parsing.
+
 You can instantiate a test pattern more than once, so to distinguish different
 instances of the pattern, the instantiation name is added as a prefix to the
 actual test suite name. Remember to pick unique prefixes for different
@@ -1142,8 +1147,8 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FooTest);
 
 You can see [sample7_unittest.cc] and [sample8_unittest.cc] for more examples.
 
-[sample7_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample7_unittest.cc "Parameterized Test example"
-[sample8_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample8_unittest.cc "Parameterized Test example with multiple parameters"
+[sample7_unittest.cc]: https://github.com/google/googletest/blob/main/googletest/samples/sample7_unittest.cc "Parameterized Test example"
+[sample8_unittest.cc]: https://github.com/google/googletest/blob/main/googletest/samples/sample8_unittest.cc "Parameterized Test example with multiple parameters"
 
 ### Creating Value-Parameterized Abstract Tests
 
@@ -1294,7 +1299,7 @@ TYPED_TEST(FooTest, HasPropertyA) { ... }
 
 You can see [sample6_unittest.cc] for a complete example.
 
-[sample6_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample6_unittest.cc "Typed Test example"
+[sample6_unittest.cc]: https://github.com/google/googletest/blob/main/googletest/samples/sample6_unittest.cc "Typed Test example"
 
 ## Type-Parameterized Tests
 
@@ -1733,7 +1738,7 @@ You can do so by adding one line:
 Now, sit back and enjoy a completely different output from your tests. For more
 details, see [sample9_unittest.cc].
 
-[sample9_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample9_unittest.cc "Event listener example"
+[sample9_unittest.cc]: https://github.com/google/googletest/blob/main/googletest/samples/sample9_unittest.cc "Event listener example"
 
 You may append more than one listener to the list. When an `On*Start()` or
 `OnTestPartResult()` event is fired, the listeners will receive it in the order
@@ -1760,7 +1765,7 @@ by the former.
 
 See [sample10_unittest.cc] for an example of a failure-raising listener.
 
-[sample10_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample10_unittest.cc "Failure-raising listener example"
+[sample10_unittest.cc]: https://github.com/google/googletest/blob/main/googletest/samples/sample10_unittest.cc "Failure-raising listener example"
 
 ## Running Test Programs: Advanced Options
 
@@ -1908,8 +1913,12 @@ Repeat the tests whose name matches the filter 1000 times.
 
 If your test program contains
 [global set-up/tear-down](#global-set-up-and-tear-down) code, it will be
-repeated in each iteration as well, as the flakiness may be in it. You can also
-specify the repeat count by setting the `GTEST_REPEAT` environment variable.
+repeated in each iteration as well, as the flakiness may be in it. To avoid
+repeating global set-up/tear-down, specify
+`--gtest_recreate_environments_when_repeating=false`{.nowrap}.
+
+You can also specify the repeat count by setting the `GTEST_REPEAT` environment
+variable.
 
 ### Shuffling the Tests
 

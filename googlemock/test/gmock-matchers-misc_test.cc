@@ -1561,7 +1561,7 @@ TEST(AnyOfArrayTest, Matchers) {
 }
 
 TEST_P(AnyOfArrayTestP, ExplainsMatchResultCorrectly) {
-  // AnyOfArray and AllOfArry use the same underlying template-template,
+  // AnyOfArray and AllOfArray use the same underlying template-template,
   // thus it is sufficient to test one here.
   const std::vector<int> v0{};
   const std::vector<int> v1{1};
@@ -1613,6 +1613,20 @@ TEST(MatcherPMacroTest, WorksOnMoveOnlyType) {
   std::unique_ptr<int> p(new int(3));
   EXPECT_THAT(p, UniquePointee(3));
   EXPECT_THAT(p, Not(UniquePointee(2)));
+}
+
+MATCHER(EnsureNoUnusedButMarkedUnusedWarning, "") { return (arg % 2) == 0; }
+
+TEST(MockMethodMockFunctionTest, EnsureNoUnusedButMarkedUnusedWarning) {
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic error "-Wused-but-marked-unused"
+#endif
+  // https://github.com/google/googletest/issues/4055
+  EXPECT_THAT(0, EnsureNoUnusedButMarkedUnusedWarning());
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 }
 
 #if GTEST_HAS_EXCEPTIONS

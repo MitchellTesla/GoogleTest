@@ -80,15 +80,15 @@ fairly rigid coding style, as defined by the
 [google-styleguide](https://github.com/google/styleguide) project. All patches
 will be expected to conform to the style outlined
 [here](https://google.github.io/styleguide/cppguide.html). Use
-[.clang-format](https://github.com/google/googletest/blob/master/.clang-format)
-to check your formatting.
+[.clang-format](https://github.com/google/googletest/blob/main/.clang-format) to
+check your formatting.
 
 ## Requirements for Contributors
 
 If you plan to contribute a patch, you need to build Google Test, Google Mock,
 and their own tests from a git checkout, which has further requirements:
 
-*   [Python](https://www.python.org/) v2.3 or newer (for running some of the
+*   [Python](https://www.python.org/) v3.6 or newer (for running some of the
     tests and re-generating certain source files from templates)
 *   [CMake](https://cmake.org/) v2.8.12 or newer
 
